@@ -1,0 +1,36 @@
+﻿@model Tachyon.Models.Explorer
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+@if (Model.CurrentDirectory != "/")
+{
+    <div class="file" onclick="nav('@Model.CurrentDirectory' + '..')">
+        <img src="~/images/folder.png" />
+        <div class="filename">
+            ..
+        </div>
+    </div>
+}
+
+@foreach (string folder in Model.Folders)
+{
+    <div class="file" onclick="nav('@Model.CurrentDirectory' + '/' + '@folder')">
+        <img src="~/images/folder.png" />
+        <div class="filename">
+            @folder
+        </div>
+    </div>
+}
+
+@foreach (string file in Model.Files)
+{
+    <a href="@Url.Action("Download", "Main")?filename=@file&pwd=@Model.CurrentDirectory">
+        <div class="file">
+            <img src="~/images/doc.png" />
+            <div class="filename">
+                @file
+            </div>
+        </div>
+    </a>
+}

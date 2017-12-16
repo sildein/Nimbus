@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
+
+* {
+    box-sizing: border-box;
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Ubuntu";
+    background-color: #2f2f2f;
+    width: 640px;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 16px;
+}
+
+body .body {
+    background-color: #dfdfdf;
+    /*border: 1px solid #d0d0d0;*/
+    border-radius: 3px;
+    word-wrap: break-word;
+    min-height: 1024px;
+    /*animation: fadein 750ms;*/
+}
+
+body greentext {
+    color: green;
+}
+
+h1, h2, h3, h4, h5 {
+    padding-left: 12px;
+    line-height: 2;
+}
+
+.doc-content {
+    padding-top: 12px;
+    line-height: 2;
+}
+
+.doc-content code {
+    font-family: "Ubuntu Mono";
+    font-size: 16px;
+    background-color: transparent;
+}
+
+.doc-content icode {
+    font-family: "Ubuntu Mono";
+    display: inline;
+    max-width: initial;
+    padding: 0;
+    margin: 0;
+    overflow: initial;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+}
+
+.doc-content img {
+    display: block;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.doc-content p {
+    padding-left: 12px;
+}
+
+a {
+    text-decoration: none;
+    color: #365d9b;
+}
+
+button {
+    line-height: 1;
+}

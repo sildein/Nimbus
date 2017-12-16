@@ -1,0 +1,62 @@
+﻿@{
+    Layout = null;
+
+    string pwd = (string)ViewData["pwd"];
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css"/>
+    <link rel="stylesheet" href="~/css/menu.css"/>
+
+    <meta name="viewport" content="width=device-width" />
+    <title>Tachyon</title>
+</head>
+
+<body>
+    <div class="infobar">
+        <div class="title">
+            <b>Tachyon</b>
+        </div>
+        <div class="username" id="username">
+            <!--nothing goes here yet-->
+        </div>
+    </div>
+    <div class="sidebar">
+        <div class="item" onclick="show_upload_dialog()">
+            Upload Files
+        </div>
+        <div class="item">
+            New Folder
+        </div>
+        <div class="item">
+            Delete
+        </div>
+    </div>
+    <div class="content">
+        <div id="Explorer">
+            @{
+                Html.RenderPartial("Explorer", new Tachyon.Models.Explorer("/"));
+            }
+        </div>
+    </div>
+    <div class="upload-dialog" id="UploadDialog">
+        <form id="UploadForm" enctype="multipart/form-data" asp-controller="Main" asp-action="Explorer">
+            Upload files here<br />
+            <br />
+            <input name="NewFiles" type="file" multiple><br />
+            <button type="submit">Upload</button>
+            <button onclick="document.getElementById('UploadDialog').style.display = 'none'">Close</button>
+        </form>
+    </div>
+</body>
+</html>
+
+<footer>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/Main.js"></script>
+</footer>

@@ -12,20 +12,15 @@ namespace Tachyon.Controllers
     public class MainController : Controller
     {
         [HttpGet]
-        public async Task<FileResult> Download(string filename, string pwd)
+        public async Task<FileResult> Download(string file)
         {
-            string FilePath = pwd + '/' + filename;
-            MemoryStream Mem = new MemoryStream();
-            using (FileStream FStream = new FileStream(Shared.Prefix + FilePath, FileMode.Open))
-            {
-                await FStream.CopyToAsync(Mem);
-            }
-            Mem.Position = 0;
-            return File(Mem, Shared.GetContentType(FilePath), Path.GetFileName(FilePath));
+            string FilePath = Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + '/' + file;
+            FileStream FStream = new FileStream(Shared.Prefix + FilePath, FileMode.Open);
+            return File(FStream, Shared.GetContentType(FilePath), Path.GetFileName(FilePath));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Explorer(ICollection<IFormFile> NewFiles)
+        /*[HttpPost]
+        public async Task Explorer(ICollection<IFormFile> NewFiles)
         {
             foreach (IFormFile FormFile in NewFiles)
             {
@@ -37,20 +32,37 @@ namespace Tachyon.Controllers
                 }
             }
             string pwd = BitConverter.ToString(HttpContext.Session.Get("pwd"));
-            //return PartialView("Explorer", new Models.Explorer(Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"))));
-            return RedirectToAction("Index");
+            //return PartialView("Explorer", new Models.Explorer(pwd));
+            //return RedirectToAction("Index");
+        }*/
+
+        [HttpPost]
+        public async Task Explorer()
+        {
+            foreach (IFormFile IncomingFile in Request.Form.Files)
+            {
+                string FilePath = Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
+                string FileName = IncomingFile.FileName.Trim('"');
+                using (FileStream FStream = new FileStream(FilePath + '/' + FileName, FileMode.Create))
+                {
+                    await IncomingFile.CopyToAsync(FStream);
+                }
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Explorer(string folder)
         {
-            if (folder.EndsWith(".."))
+            string CurrentWorkingDirectory = Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
+            string NewFolder;
+
+            if (folder == "..")
             {
-                string NewFolder;
+                // We use this exception to keep the user from trying to escape our chroot
                 try
                 {
-                    int index = folder.LastIndexOf('/');
-                    NewFolder = folder.Substring(0, index);
+                    int index = CurrentWorkingDirectory.LastIndexOf('/');
+                    NewFolder = CurrentWorkingDirectory.Substring(0, index);
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -61,11 +73,19 @@ namespace Tachyon.Controllers
                 return PartialView("Explorer", new Models.Explorer(NewFolder));
             }
 
-            else if (Directory.Exists(Shared.Prefix + folder))
+            // For refreshing the Explorer view after uploading files
+            else if (folder == String.Empty)
             {
-                HttpContext.Session.SetString("pwd", folder);
-                ViewData["pwd"] = folder;
-                return PartialView("Explorer", new Models.Explorer(folder));
+                ViewData["pwd"] = CurrentWorkingDirectory;
+                return PartialView("Explorer", new Models.Explorer(CurrentWorkingDirectory));
+            }
+
+            else if (Directory.Exists(Shared.Prefix + CurrentWorkingDirectory + '/' + folder))
+            {
+                NewFolder = CurrentWorkingDirectory + '/' + folder;
+                HttpContext.Session.SetString("pwd", NewFolder);
+                ViewData["pwd"] = NewFolder;
+                return PartialView("Explorer", new Models.Explorer(NewFolder));
             }
 
             // If control reaches this we have a problem
@@ -73,7 +93,7 @@ namespace Tachyon.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             HttpContext.Session.SetString("pwd", "/");
             return View();

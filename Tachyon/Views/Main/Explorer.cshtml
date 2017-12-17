@@ -5,32 +5,32 @@
 
 @if (Model.CurrentDirectory != "/")
 {
-    <div class="file" onclick="nav('@Model.CurrentDirectory' + '..')">
+    <div class="file" onclick="nav('..')">
         <img src="~/images/folder.png" />
-        <div class="filename">
+        <span class="file-info">
             ..
-        </div>
+        </span>
     </div>
 }
 
 @foreach (string folder in Model.Folders)
 {
-    <div class="file" onclick="nav('@Model.CurrentDirectory' + '/' + '@folder')">
+    <div class="file" onclick="nav('@folder')">
         <img src="~/images/folder.png" />
-        <div class="filename">
+        <span class="file-info">
             @folder
-        </div>
+        </span>
     </div>
 }
 
 @foreach (string file in Model.Files)
 {
-    <a href="@Url.Action("Download", "Main")?filename=@file&pwd=@Model.CurrentDirectory">
-        <div class="file">
+    <a href="@Url.Action("Download", "Main")?file=@file">
+        <div class="file" href="@Url.Action("Download", "Main")?file=@file">
             <img src="~/images/doc.png" />
-            <div class="filename">
+            <span class="file-info">
                 @file
-            </div>
+            </span>
         </div>
     </a>
 }

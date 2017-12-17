@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Tachyon.Models.Main
+
+@{
     Layout = null;
 
     string pwd = (string)ViewData["pwd"];
@@ -45,13 +47,11 @@
         </div>
     </div>
     <div class="upload-dialog" id="UploadDialog">
-        <form id="UploadForm" enctype="multipart/form-data" asp-controller="Main" asp-action="Explorer">
-            Upload files here<br />
-            <br />
-            <input name="NewFiles" type="file" multiple><br />
-            <button type="submit">Upload</button>
-            <button onclick="document.getElementById('UploadDialog').style.display = 'none'">Close</button>
-        </form>
+        Upload files here<br />
+        <br />
+        <input id="FilesToUpload" type="file" multiple><br />
+        <button onclick="upload_files()">Upload</button>
+        <button onclick="UploadDialog.style.display = 'none'">Close</button>
     </div>
 </body>
 </html>

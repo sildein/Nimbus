@@ -8,6 +8,7 @@
 
 * {
     font-family: Ubuntu;
+    text-decoration: none;
 }
 
 body {
@@ -28,15 +29,15 @@ body {
     z-index: 1;
 }
 
-    .infobar .title {
-        /*display: inline;*/
-        font-size: 18px;
-        top: 0px;
-        /*text-align: center;*/
-        line-height: 2.5;
-        margin-bottom: 60px;
-        padding-left: 15px;
-    }
+.infobar .title {
+    /*display: inline;*/
+    font-size: 18px;
+    top: 0px;
+    /*text-align: center;*/
+    line-height: 2.5;
+    margin-bottom: 60px;
+    padding-left: 15px;
+}
 
 .infobar .username {
     float: right;
@@ -73,47 +74,41 @@ body {
 
 .content {
     margin-left: 180px;
-    margin-top: 32px;
+    margin-top: 48px;
 }
 
 .file {
-    display: inline-block;
-    padding: 15px;
-    width: 90px;
-    height: 90px;
+    display: block;
+    /*padding: 15px;*/
+    width: 100%;
+    height: 48px;
+    border: solid 1px #2f2f2f;
+    margin-bottom: 4px;
 }
 
-.file .filename {
-    text-align: center;
+.file .file-info {
+    display: inline;
+    line-height: 48px;
     font-size: 14px;
-    width: 85px;
+    color: black;
+    vertical-align: text-bottom;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .file img {
-    margin: 0 auto;
-    max-width: 64px;
-    max-height: 64px;
-    display: block;
-    padding-bottom: 9px;
+    display: inline-block;
+    max-width: 32px;
+    max-height: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 4px;
 }
 
 .file:hover {
     background-color: #cfcfcf;
 }
-
-/*.modal {
-    display: none;
-    width: 100%;
-    height: 100%;
-    margin: 0px 0px;
-    left: 0px;
-    right: 0px;
-    background-color: black;
-    opacity: 0.4;
-}*/
 
 .upload-dialog {
     display: none;

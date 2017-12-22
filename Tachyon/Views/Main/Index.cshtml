@@ -1,62 +1,58 @@
-﻿@model Tachyon.Models.Main
+﻿<!--
+    Index.cshtml
+    This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+-->
 
+@model Tachyon.Models.Main
 @{
     Layout = null;
-
-    string pwd = (string)ViewData["pwd"];
 }
-
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, AuthoringTagHelpers
 
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="~/css/site.css"/>
-    <link rel="stylesheet" href="~/css/menu.css"/>
-
     <meta name="viewport" content="width=device-width" />
     <title>Tachyon</title>
 </head>
 
 <body>
-    <div class="infobar">
+    <div class="titlebar">
         <div class="title">
-            <b>Tachyon</b>
+            Test
         </div>
-        <div class="username" id="username">
-            <!--nothing goes here yet-->
+        <div class="item" onclick="download()">
+            Download
         </div>
-    </div>
-    <div class="sidebar">
-        <div class="item" onclick="show_upload_dialog()">
-            Upload Files
-        </div>
-        <div class="item">
+        <label for="FilesToUpload">
+            <div class="item">
+                Upload
+            </div>
+        </label>
+        <div class="item" onclick="new_folder()">
             New Folder
         </div>
-        <div class="item">
+        <div class="item" onclick="delete_files()">
             Delete
         </div>
     </div>
-    <div class="content">
-        <div id="Explorer">
-            @{
-                Html.RenderPartial("Explorer", new Tachyon.Models.Explorer("/"));
-            }
-        </div>
+    <div class="content" id="Explorer">
+        @{
+            Html.RenderPartial("Explorer", new Tachyon.Models.Explorer("/"));
+        }
     </div>
-    <div class="upload-dialog" id="UploadDialog">
-        Upload files here<br />
-        <br />
-        <input id="FilesToUpload" type="file" multiple><br />
-        <button onclick="upload_files()">Upload</button>
-        <button onclick="UploadDialog.style.display = 'none'">Close</button>
+    <div class="info-panel" id="InfoPanel">
+        <div class="info-panel-content" id="InfoPanelContent"></div>
     </div>
+    <input id="FilesToUpload" type="file" style="position: absolute; z-index: 5; right: -10000px; display: none;" multiple><br />
 </body>
 </html>
 
 <footer>
+    <link rel="stylesheet" href="~/css/Main.css" />
+
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/js/Main.js"></script>
+    <script src="~/js/Events.js"></script>
 </footer>

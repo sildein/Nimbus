@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * MainController.cs
+ * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +16,7 @@ namespace Tachyon.Controllers
 {
     public class MainController : Controller
     {
+        // Muh file downloads
         [HttpGet]
         public async Task<FileResult> Download(string file)
         {
@@ -19,23 +25,7 @@ namespace Tachyon.Controllers
             return File(FStream, Shared.GetContentType(FilePath), Path.GetFileName(FilePath));
         }
 
-        /*[HttpPost]
-        public async Task Explorer(ICollection<IFormFile> NewFiles)
-        {
-            foreach (IFormFile FormFile in NewFiles)
-            {
-                string FilePath = Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
-                string FileName = FormFile.FileName.Trim('"');
-                using (FileStream FStream = new FileStream(FilePath + '/' + FileName, FileMode.Create))
-                {
-                    await FormFile.CopyToAsync(FStream);
-                }
-            }
-            string pwd = BitConverter.ToString(HttpContext.Session.Get("pwd"));
-            //return PartialView("Explorer", new Models.Explorer(pwd));
-            //return RedirectToAction("Index");
-        }*/
-
+        // Uploads
         [HttpPost]
         public async Task Explorer()
         {
@@ -43,6 +33,7 @@ namespace Tachyon.Controllers
             {
                 string FilePath = Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
                 string FileName = IncomingFile.FileName.Trim('"');
+
                 using (FileStream FStream = new FileStream(FilePath + '/' + FileName, FileMode.Create))
                 {
                     await IncomingFile.CopyToAsync(FStream);
@@ -50,6 +41,35 @@ namespace Tachyon.Controllers
             }
         }
 
+        // Create a new folder
+        [HttpPost]
+        public async Task<IActionResult> NewFolder(string name)
+        {
+            string Folder = Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + name;
+            Directory.CreateDirectory(Folder);
+            return Ok();
+        }
+
+        // Delete
+        [HttpPost]
+        public async Task<IActionResult> Delete(string thing_to_delete)
+        {
+            if (thing_to_delete.StartsWith("folder_"))
+            {
+                Directory.Delete(Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) +
+                    thing_to_delete.Substring(7), true);
+            }
+
+            else if (thing_to_delete.StartsWith("file_"))
+            {
+                System.IO.File.Delete(Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) +
+                    thing_to_delete.Substring(5));
+            }
+
+            return Ok();
+        }
+
+        // The file explorer that makes up most of this app
         [HttpGet]
         public async Task<IActionResult> Explorer(string folder)
         {
@@ -62,19 +82,20 @@ namespace Tachyon.Controllers
                 try
                 {
                     int index = CurrentWorkingDirectory.LastIndexOf('/');
-                    NewFolder = CurrentWorkingDirectory.Substring(0, index);
+                    NewFolder = CurrentWorkingDirectory.Substring(0, index - 1);
                 }
                 catch (ArgumentOutOfRangeException)
                 {
                     NewFolder = "/";
                 }
+
                 HttpContext.Session.SetString("pwd", NewFolder);
                 ViewData["pwd"] = NewFolder;
                 return PartialView("Explorer", new Models.Explorer(NewFolder));
             }
 
             // For refreshing the Explorer view after uploading files
-            else if (folder == String.Empty)
+            else if (folder == "")
             {
                 ViewData["pwd"] = CurrentWorkingDirectory;
                 return PartialView("Explorer", new Models.Explorer(CurrentWorkingDirectory));
@@ -82,7 +103,7 @@ namespace Tachyon.Controllers
 
             else if (Directory.Exists(Shared.Prefix + CurrentWorkingDirectory + '/' + folder))
             {
-                NewFolder = CurrentWorkingDirectory + '/' + folder;
+                NewFolder = CurrentWorkingDirectory + folder;
                 HttpContext.Session.SetString("pwd", NewFolder);
                 ViewData["pwd"] = NewFolder;
                 return PartialView("Explorer", new Models.Explorer(NewFolder));

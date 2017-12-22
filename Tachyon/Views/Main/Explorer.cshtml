@@ -1,10 +1,20 @@
-﻿@model Tachyon.Models.Explorer
+﻿<!--
+    Explorer.cshtml
+    This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+-->
 
+@model Tachyon.Models.Explorer
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, AuthoringTagHelpers
+@{
+    byte[] pwd_temp;
+    Context.Session.TryGetValue("pwd", out pwd_temp);
+    string pwd = System.Text.Encoding.ASCII.GetString(pwd_temp);
+}
 
-@if (Model.CurrentDirectory != "/")
+@if (pwd != "/")
 {
+    <script>console.log("@pwd")</script>
     <div class="file" onclick="nav('..')">
         <img src="~/images/folder.png" />
         <span class="file-info">
@@ -15,9 +25,10 @@
 
 @foreach (string folder in Model.Folders)
 {
-    <div class="file" onclick="nav('@folder')">
-        <img src="~/images/folder.png" />
-        <span class="file-info">
+    <div class="file" id="folder_@folder">
+        <input type="checkbox" style="margin-left: 15px" />
+        <img src="~/images/folder.png" onclick="nav('@folder')" />
+        <span class="file-info" onclick="nav('@folder')">
             @folder
         </span>
     </div>
@@ -25,12 +36,11 @@
 
 @foreach (string file in Model.Files)
 {
-    <a href="@Url.Action("Download", "Main")?file=@file">
-        <div class="file" href="@Url.Action("Download", "Main")?file=@file">
-            <img src="~/images/doc.png" />
-            <span class="file-info">
-                @file
-            </span>
-        </div>
-    </a>
+    <div class="file" id="file_@file">
+        <input type="checkbox" style="margin-left: 15px" />
+        <img src="~/images/doc.png" />
+        <span class="file-info">
+            @file
+        </span>
+    </div>
 }

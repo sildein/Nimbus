@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Program.cs
+ * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

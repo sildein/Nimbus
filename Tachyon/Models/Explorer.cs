@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Explorer.cs
+ * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ */
+
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;

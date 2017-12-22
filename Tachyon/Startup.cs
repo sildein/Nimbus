@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Startup.cs
+ * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ */
+
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +40,6 @@ namespace Tachyon
             services.AddSingleton<IFileProvider>(
                 new PhysicalFileProvider(
                     Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
-
             services.AddMvc();
         }
 

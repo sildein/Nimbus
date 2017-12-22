@@ -1,6 +1,6 @@
 ﻿/*
  * MainController.cs
- * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
 
 using System;
@@ -12,11 +12,10 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
-namespace Tachyon.Controllers
+namespace Nimbus.Controllers
 {
     public class MainController : Controller
     {
-        // Muh file downloads
         [HttpGet]
         public async Task<FileResult> Download(string file)
         {
@@ -117,7 +116,7 @@ namespace Tachyon.Controllers
         public async Task<IActionResult> Index()
         {
             HttpContext.Session.SetString("pwd", "/");
-            return View();
+            return View(new Models.Main());
         }
     }
 }

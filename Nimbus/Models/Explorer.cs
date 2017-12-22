@@ -1,6 +1,6 @@
 ﻿/*
  * Explorer.cs
- * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
 
 using System;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Tachyon.Models
+namespace Nimbus.Models
 {
     public class Explorer
     {

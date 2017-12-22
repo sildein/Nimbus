@@ -1,19 +1,16 @@
 ﻿/*
  * Main.js
- * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
 
 // Navigation
 var nav = function (folder) {
-    $.ajax({
-        url: "/Main/Explorer",
-        data: {
-            folder: folder,
-        },
-        success: function (data) {
-            $("#Explorer").html(data);
-        },
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/Main/Explorer?folder=" + folder, true);
+    xhr.addEventListener("load", function () {
+        document.getElementById("Explorer").innerHTML = xhr.responseText;
     });
+    xhr.send();
 }
 
 var download = function () {
@@ -30,7 +27,7 @@ var download = function () {
 
 // Upload files
 var file_input = document.getElementById("FilesToUpload");
-$("#FilesToUpload").change(function () {
+file_input.addEventListener('change', function () {
     var files = file_input.files;
     for (var i = 0; i < files.length; i++) {
         var file = files[i];
@@ -78,16 +75,15 @@ Folders will be deleted recursively. THIS CANNOT BE UNDONE.\n\nType \"yes\" to c
     if (confirmation != "yes") return;
     for (var i = 0; i < items.length; i++) {
         if (items[i].firstElementChild.checked) {
-            $.ajax({
-                url: "/Main/Delete",
-                type: "POST",
-                data: {
-                    thing_to_delete: items[i].id,
-                },
-                success: function (result) {
-                    info_panel.innerHTML += "Deleted item<br/>\"" + "\"<br/><br/>";
-                },
-            });
+            var id = items[i].id;
+            var xhr = new XMLHttpRequest();
+            var formdata = new FormData();
+            formdata.append("thing_to_delete", id);
+            xhr.open("POST", "/Main/Delete", true);
+            xhr.onload = function () {
+                info_panel.innerHTML += "Deleted item<br/>\"" + id.substring(id.indexOf("_") + 1) + "\"<br/><br/>";
+            }
+            xhr.send(formdata);
         }
     }
     nav("");

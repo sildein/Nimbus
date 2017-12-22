@@ -1,9 +1,9 @@
 ﻿<!--
     Index.cshtml
-    This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+    This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
 -->
 
-@model Tachyon.Models.Main
+@model Nimbus.Models.Main
 @{
     Layout = null;
 }
@@ -14,13 +14,13 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Tachyon</title>
+    <title>@Nimbus.Shared.Title</title>
 </head>
 
 <body>
     <div class="titlebar">
         <div class="title">
-            Test
+            @Nimbus.Shared.Title
         </div>
         <div class="item" onclick="download()">
             Download
@@ -39,7 +39,7 @@
     </div>
     <div class="content" id="Explorer">
         @{
-            Html.RenderPartial("Explorer", new Tachyon.Models.Explorer("/"));
+            Html.RenderPartial("Explorer", new Nimbus.Models.Explorer("/"));
         }
     </div>
     <div class="info-panel" id="InfoPanel">

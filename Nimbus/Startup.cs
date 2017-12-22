@@ -1,6 +1,6 @@
 ﻿/*
  * Startup.cs
- * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
 
 using System;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 
-namespace Tachyon
+namespace Nimbus
 {
     public class Startup
     {
@@ -32,7 +32,7 @@ namespace Tachyon
 
             services.AddSession(options =>
             {
-                options.Cookie.Name = ".Tachyon.Session";
+                options.Cookie.Name = ".Nimbus.Session";
                 options.IdleTimeout = TimeSpan.FromMinutes(15);
                 options.Cookie.HttpOnly = true;
             });

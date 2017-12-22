@@ -1,4 +1,4 @@
-## Tachyon
+## Nimbus
 A filesharing webapp built on ASP.NET Core MVC. I'm writing this for my own personal use, and as a learning experience. 
 
 It's nowhere near complete, and my code is a clusterfuck. I highly recommend against using this until the first release.
@@ -28,6 +28,10 @@ includes commercial purposes, with or without financial gain.
 -------------------------------------------------------------------------------
 
 Disclaimer:
+
+This software is provided to you free of charge. As such, it does not carry any
+kind of warranty whatsoever, express or implied.
+
 You are solely responsible for any undesirable things that happen as a
 result of your use of this software, including (but not limited to) data loss,
 hardware/software damage, acts of God, hurt feelings, and theft by a meth
@@ -51,13 +55,14 @@ around it. URL shorteners are especially unacceptable.
 
 The host must not restrict users' access to the software through any means.
 This includes paywalls, registration walls, and freemium limitations such as
-throttling and wait times.
+throttling and wait times. This does not apply to private cloud storage
+accounts.
 -------------------------------------------------------------------------------
 
 Derivative Works:
 
-You may create derivative software packages based on this software, as long as
-the following conditions are met:
+You may create derivative software packages based on this software and release
+them under any license you wish, as long as the following conditions are met:
 
 The derivative work must include a notice somewhere easily accessible to the
 user that acknowledges the use of this software, such as an "about" section or
@@ -68,4 +73,9 @@ must be moderate changes made to the application logic, or it must be used as
 part of a larger project. If neither of those statements apply, all of the
 statements under "Redistribution" remain in effect.
 -------------------------------------------------------------------------------
+
+Shrink-wrap Clause:
+
+Executing, modifying, or redistributing this software constitutes agreement to
+the terms of this license. If you do not agree, do not use the software.
 ```

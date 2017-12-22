@@ -1,6 +1,6 @@
 ﻿/*
  * Shared.cs
- * This file is a part of Tachyon. Copyright (c) 2017-present Jesse Jones.
+ * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
 
 using System;
@@ -8,12 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Tachyon
+namespace Nimbus
 {
     public static class Shared
     {
-        public static string Prefix = "C:/ShareMe";
+        // User-configurable variables
+        public static string Title;
+        public static string Prefix;
+        public static string Port;
 
+        // Get MIME types
         public static string GetContentType(string FilePath)
         {
             string Extension = System.IO.Path.GetExtension(FilePath).ToLowerInvariant();

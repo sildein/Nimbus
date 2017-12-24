@@ -11,21 +11,6 @@ namespace Nimbus.Controllers
 {
     public class IOController : Controller
     {
-        // Used by IOController to see if all chunks of the uploaded file are present
-        public bool CheckChunks(string PartialFileName)
-        {
-            foreach (string f in Directory.GetFiles(Shared.Prefix + "/Temp"))
-            {
-                int ThisChunk = Int32.Parse(PartialFileName.Split('_').Last().Split('.').First());
-                int TotalChunks = Int32.Parse(PartialFileName.Split('_').Last().Split('.').Last());
-                if (ThisChunk == TotalChunks)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         [HttpGet]
         public async Task<FileResult> Download(string file)
         {
@@ -33,8 +18,7 @@ namespace Nimbus.Controllers
             FileStream FStream = new FileStream(Shared.Prefix + "/Files" + FilePath, FileMode.Open);
             return File(FStream, Shared.GetContentType(FilePath), Path.GetFileName(FilePath));
         }
-
-        // Uploads
+        
         [HttpPost]
         public async Task Upload()
         {
@@ -42,6 +26,8 @@ namespace Nimbus.Controllers
             string FilePath = Shared.Prefix + "/Files" + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
             string TempFilePath = Shared.Prefix + "/Temp";
             string PartialFileName = IncomingFile.FileName.Trim('"');
+            int ThisChunk = Int32.Parse(PartialFileName.Split('_').Last().Split('.').First());
+            int TotalChunks = Int32.Parse(PartialFileName.Split('_').Last().Split('.').Last());
 
             string FileName = PartialFileName.Substring(0, PartialFileName.LastIndexOf('_'));
             FileName = FileName.Substring(0, FileName.LastIndexOf('.'));
@@ -52,37 +38,22 @@ namespace Nimbus.Controllers
                 FStream.Close();
             }
 
-            if (CheckChunks(PartialFileName))
+            if (ThisChunk == TotalChunks)
             {
                 FileStream FStream = new FileStream(FilePath + '/' + FileName, FileMode.Create);
-                foreach (string f in Directory.GetFiles(Shared.Prefix + "/Temp"))
+                for (int i = 1; i <= TotalChunks; i++)
                 {
-                    FileStream PartialFileStream = new FileStream(f, FileMode.Open);
-                    PartialFileStream.CopyTo(FStream);
+                    string FullFilePath = TempFilePath + '/' + FileName + String.Format(".part_{0}.{1}",
+                        i, TotalChunks);
+                    FileStream PartialFileStream = new FileStream(FullFilePath, FileMode.Open);
+                    await PartialFileStream.CopyToAsync(FStream);
                     PartialFileStream.Close();
-                    System.IO.File.Delete(f);
+                    System.IO.File.Delete(FullFilePath);
                 }
                 FStream.Close();
             }
         }
-
-        /*// Uploads
-        [HttpPost]
-        public async Task Upload()
-        {
-            foreach (IFormFile IncomingFile in Request.Form.Files)
-            {
-                string FilePath = Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
-                string FileName = IncomingFile.FileName.Trim('"');
-
-                using (FileStream FStream = new FileStream(FilePath + '/' + FileName, FileMode.Create))
-                {
-                    await IncomingFile.CopyToAsync(FStream);
-                }
-            }
-        }*/
-
-        // Create a new folder
+        
         [HttpPost]
         public async Task<IActionResult> NewFolder(string name)
         {
@@ -90,8 +61,7 @@ namespace Nimbus.Controllers
             Directory.CreateDirectory(Folder);
             return Ok();
         }
-
-        // Delete
+        
         [HttpPost]
         public async Task<IActionResult> Delete(string thing_to_delete)
         {
@@ -101,8 +71,9 @@ namespace Nimbus.Controllers
                     thing_to_delete.Substring(7), true);
             } else if (thing_to_delete.StartsWith("file_"))
             {
-                System.IO.File.Delete(Shared.Prefix + "/Files" +
-                    Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + thing_to_delete.Substring(5));
+                string DeletThis = Shared.Prefix + "/Files" +
+                    Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + '/' + thing_to_delete.Substring(5);
+                System.IO.File.Delete(DeletThis);
             }
 
             return Ok();

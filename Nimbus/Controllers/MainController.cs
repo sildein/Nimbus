@@ -16,58 +16,6 @@ namespace Nimbus.Controllers
 {
     public class MainController : Controller
     {
-        [HttpGet]
-        public async Task<FileResult> Download(string file)
-        {
-            string FilePath = Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + '/' + file;
-            FileStream FStream = new FileStream(Shared.Prefix + FilePath, FileMode.Open);
-            return File(FStream, Shared.GetContentType(FilePath), Path.GetFileName(FilePath));
-        }
-
-        // Uploads
-        [HttpPost]
-        public async Task Explorer()
-        {
-            foreach (IFormFile IncomingFile in Request.Form.Files)
-            {
-                string FilePath = Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
-                string FileName = IncomingFile.FileName.Trim('"');
-
-                using (FileStream FStream = new FileStream(FilePath + '/' + FileName, FileMode.Create))
-                {
-                    await IncomingFile.CopyToAsync(FStream);
-                }
-            }
-        }
-
-        // Create a new folder
-        [HttpPost]
-        public async Task<IActionResult> NewFolder(string name)
-        {
-            string Folder = Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + name;
-            Directory.CreateDirectory(Folder);
-            return Ok();
-        }
-
-        // Delete
-        [HttpPost]
-        public async Task<IActionResult> Delete(string thing_to_delete)
-        {
-            if (thing_to_delete.StartsWith("folder_"))
-            {
-                Directory.Delete(Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) +
-                    thing_to_delete.Substring(7), true);
-            }
-
-            else if (thing_to_delete.StartsWith("file_"))
-            {
-                System.IO.File.Delete(Shared.Prefix + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) +
-                    thing_to_delete.Substring(5));
-            }
-
-            return Ok();
-        }
-
         // The file explorer that makes up most of this app
         [HttpGet]
         public async Task<IActionResult> Explorer(string folder)
@@ -100,7 +48,7 @@ namespace Nimbus.Controllers
                 return PartialView("Explorer", new Models.Explorer(CurrentWorkingDirectory));
             }
 
-            else if (Directory.Exists(Shared.Prefix + CurrentWorkingDirectory + '/' + folder))
+            else if (Directory.Exists(Shared.Prefix + "/Files" + CurrentWorkingDirectory + '/' + folder))
             {
                 NewFolder = CurrentWorkingDirectory + folder;
                 HttpContext.Session.SetString("pwd", NewFolder);

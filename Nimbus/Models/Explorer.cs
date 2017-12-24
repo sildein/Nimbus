@@ -24,10 +24,10 @@ namespace Nimbus.Models
 
             this.CurrentDirectory = Folder;
 
-            string[] Files = Directory.GetFiles(Shared.Prefix + Folder);
+            string[] Files = Directory.GetFiles(Shared.Prefix + "/Files" + Folder);
             foreach (string file in Files) this.Files.Add(file.Split('/', '\\').Last());
 
-            string[] Folders = Directory.GetDirectories(Shared.Prefix + Folder);
+            string[] Folders = Directory.GetDirectories(Shared.Prefix + "/Files" + Folder);
             foreach (string folder in Folders) this.Folders.Add(folder.Split('/', '\\').Last());
             Directory.GetCurrentDirectory();
         }

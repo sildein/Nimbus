@@ -14,13 +14,15 @@
 
 @if (pwd != "/")
 {
-    <script>console.log("@pwd")</script>
     <div class="file" onclick="nav('..')">
         <img src="~/images/folder.png" />
         <span class="file-info">
             ..
         </span>
     </div>
+} else
+{
+    <div class="dummy"></div>
 }
 
 @foreach (string folder in Model.Folders)

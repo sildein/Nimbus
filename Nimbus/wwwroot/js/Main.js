@@ -22,7 +22,7 @@ var download = function () {
         if (item.firstElementChild.checked && item.id.startsWith("file_")) {
             var progress_elem = info_panel.appendChild(document.createElement("div"));
             progress_elem.style.borderBottom = "3px solid";
-            progress_elem.innerHTML = "<br/>Downloading<br/>" + item.id.substr(5) + "<br/><br/>";
+            progress_elem.innerHTML = "<br/>Downloading item<br/>\"" + item.id.substr(5) + "\"<br/><br/>";
             window.open("/IO/Download?file=" + item.id.substr(5), "_blank");
         }
     }
@@ -54,9 +54,8 @@ var slice_and_upload_file = function (file) {
         formdata.append(chunk_name, file_chunk, chunk_name);
         xhr.open("POST", "/IO/Upload", false);
         xhr.addEventListener("load", function () {
-            progress_elem.innerHTML = "<br/>Uploading " + file.name + "<br/>" +
+            progress_elem.innerHTML = "<br/>Uploading item<br/>\"" + file.name + "\"<br/>" +
                 (i + 1) + "MB /" + total_parts + "MB<br/><br/>";
-            progress_elem.scrollTo(0, 0);
         });
         xhr.send(formdata);
     }

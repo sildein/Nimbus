@@ -1,6 +1,6 @@
 ﻿####################### Sildein's Free Software License #######################
 
-Copyright (c) 2017 Jesse Jones.
+Copyright (c) 2017-present Jesse Jones.
 
 This license exists because I believe the mainstream free software licenses all
 suck. The GNU GPL is a communist tumor, and the more permissive licenses allow

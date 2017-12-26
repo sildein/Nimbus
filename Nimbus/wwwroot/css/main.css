@@ -118,5 +118,7 @@ body {
 }
 
 .info-panel-content {
+    display: flex;
+    flex-direction: column-reverse;
     padding: 15px 15px;
 }

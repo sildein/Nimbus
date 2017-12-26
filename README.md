@@ -1,16 +1,35 @@
 ## Nimbus
-A filesharing webapp built on ASP.NET Core MVC. I'm writing this for my own personal use, and as a learning experience. 
+A filesharing webapp built on ASP .NET Core MVC. I'm writing this for my own
+personal use, and as a learning experience.
 
-It's nowhere near complete, and my code is a clusterfuck. I highly recommend against using this until the first release.
+### What Works
+The basics. No access control whatsoever. Just uploads, downloads, folder
+creation, and deletion. I advise against exposing this to the open internet.
 
-### Planned for Version 1
-The basics. No multiuser support. Just folder navigation and file uploads, downloads and deletion.
+### Download
+Get the latest release archive from [here](https://github.com/sildein/Nimbus/releases/latest).
+
+### Configuration
+See the file `config.ini` in the release archive. You'll notice the following
+options:
+- `Title` - Your server's name. This name is  used in the `<title>` tag, and
+	the menu bar at the top of the page.
+- `Prefix` - Where your files are actually kept. You need to create this folder
+and two subfolders named `Files` and `Temp`. I recommend using forward slashes.
+- `Port` - The port used to access your server. This one shouldn't need to be
+explained. 
+
+### Planned for Version 2
+- Multiuser support. This isn't meant to serve a bunch of people, so I'll most
+likely forgo a full-blown database in favor of a plaintext config file
+containing usernames and password hashes.
+- An admin panel that lets you configure user accounts and anonymous access.
 
 ### License
 ```
 ####################### Sildein's Free Software License #######################
 
-Copyright (c) 2017 Jesse Jones.
+Copyright (c) 2017-present Jesse Jones.
 
 This license exists because I believe the mainstream free software licenses all
 suck. The GNU GPL is a communist tumor, and the more permissive licenses allow

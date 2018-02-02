@@ -1,4 +1,4 @@
-﻿/*
+/*
  * MainController.cs
  * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
@@ -17,54 +17,55 @@ namespace Nimbus.Controllers
     public class MainController : Controller
     {
         // The file explorer that makes up most of this app
-        [HttpGet]
-        public async Task<IActionResult> Explorer(string folder)
+        [HttpPost]
+        public IActionResult Explorer()
         {
-            string CurrentWorkingDirectory = Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
-            string NewFolder;
+            // Check for a valid auth cookie
+            string Username =
+                Shared.Users.ValidateCookie(Request.Cookies["Auth"]);
+            if (Username == null) return Forbid();
 
-            if (folder == "..")
+            string Folder = Request.Form["Folder"];
+
+            if (Folder == "..")
             {
-                // We use this exception to keep the user from trying to escape our chroot
-                try
-                {
-                    int index = CurrentWorkingDirectory.LastIndexOf('/');
-                    NewFolder = CurrentWorkingDirectory.Substring(0, index - 1);
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    NewFolder = "/";
-                }
-
-                HttpContext.Session.SetString("pwd", NewFolder);
-                ViewData["pwd"] = NewFolder;
-                return PartialView("Explorer", new Models.Explorer(NewFolder));
+                string ThisFolder = Directory.GetParent(
+                    HttpContext.Session.GetString("pwd")).ToString();
+                HttpContext.Session.SetString("pwd", ThisFolder);
+                return PartialView("Explorer",
+                                   new Models.Explorer(Username, ThisFolder));
             }
 
-            // For refreshing the Explorer view after uploading files
-            else if (folder == "")
+            else
             {
-                ViewData["pwd"] = CurrentWorkingDirectory;
-                return PartialView("Explorer", new Models.Explorer(CurrentWorkingDirectory));
+                string ThisFolder = Path.Combine(
+                    HttpContext.Session.GetString("pwd"), Folder);
+                HttpContext.Session.SetString("pwd", ThisFolder);
+                string ayylomao = HttpContext.Session.GetString("pwd");
+                return PartialView("Explorer",
+                                   new Models.Explorer(Username, ThisFolder));
             }
-
-            else if (Directory.Exists(Shared.Prefix + "/Files" + CurrentWorkingDirectory + '/' + folder))
-            {
-                NewFolder = CurrentWorkingDirectory + folder;
-                HttpContext.Session.SetString("pwd", NewFolder);
-                ViewData["pwd"] = NewFolder;
-                return PartialView("Explorer", new Models.Explorer(NewFolder));
-            }
-
-            // If control reaches this we have a problem
-            return NotFound();
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             HttpContext.Session.SetString("pwd", "/");
-            return View(new Models.Main());
+
+            // Send users to the login page if they don't have a valid auth
+            // cookie
+            if (Request.Cookies.ContainsKey("Auth"))
+            {
+                string User = Shared.Users.ValidateCookie(
+                    Request.Cookies["Auth"]);
+                if (User != null)
+                {
+                    ViewData["Username"] = User;
+                    return View(new Models.Main());
+                }
+            }
+            return Redirect("/Auth/");
         }
     }
 }

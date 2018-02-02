@@ -1,4 +1,4 @@
-﻿<!--
+<!--
     Index.cshtml
     This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
 -->
@@ -36,12 +36,11 @@
         <div class="item" onclick="delete_files()">
             Delete
         </div>
+        <div class="item" style="float:right" onclick="window.location='/Auth/Logout'">
+            Log Out
+        </div>
     </div>
-    <div class="content" id="Explorer">
-        @{
-            Html.RenderPartial("Explorer", new Nimbus.Models.Explorer("/"));
-        }
-    </div>
+    <div class="content" id="Explorer"></div>
     <div class="info-panel" id="InfoPanel">
         <div class="info-panel-content" id="InfoPanelContent"></div>
     </div>
@@ -50,9 +49,9 @@
 </html>
 
 <footer>
-    <link rel="stylesheet" href="~/css/Main.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/js/Main.js"></script>
-    <script src="~/js/Events.js"></script>
+    <script src="~/js/main.js"></script>
+    <script src="~/js/events.js"></script>
 </footer>

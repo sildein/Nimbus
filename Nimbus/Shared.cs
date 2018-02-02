@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Shared.cs
  * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
@@ -6,6 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Nimbus
@@ -16,18 +19,46 @@ namespace Nimbus
         public static string Title;
         public static string Prefix;
         public static string Port;
+        public static UserDatabase Users;
+        public static AdminSettings Admin;
+
 
         // Get MIME types
         public static string GetContentType(string FilePath)
         {
-            string Extension = System.IO.Path.GetExtension(FilePath).ToLowerInvariant();
+            string Extension =
+                System.IO.Path.GetExtension(FilePath).ToLowerInvariant();
             if (MIMETypes.ContainsKey(Extension))
                 return MIMETypes[Extension];
             else
                 return "application/octet-stream";
         }
 
-        public static Dictionary<string, string> MIMETypes = new Dictionary<string, string>() {
+
+        // Get SHA512 hash of string
+        public static string GetHash(string Thing)
+        {
+            StringBuilder HashString = new StringBuilder();
+            byte[] Hash =
+                SHA512.Create().ComputeHash(Encoding.ASCII.GetBytes(Thing));
+
+            foreach (byte b in Hash) HashString.Append(b.ToString("x2"));
+
+            return HashString.ToString();
+        }
+
+
+        // Get random string
+        public static string GetRandomHash()
+        {
+            byte[] RandomBytes = new byte[16384];
+            new Random().NextBytes(RandomBytes);
+            return Shared.GetHash(Encoding.ASCII.GetString(RandomBytes));
+        }
+
+
+        public static Dictionary<string, string> MIMETypes =
+            new Dictionary<string, string>() {
             {"asf", "video/x-ms-asf"},
             {"asx", "video/x-ms-asf"},
             {"avi", "video/x-msvideo"},

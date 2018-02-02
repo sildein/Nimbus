@@ -1,29 +1,18 @@
 ## Nimbus
-A filesharing webapp built on ASP .NET Core MVC. I'm writing this for my own
-personal use, and as a learning experience.
+A cloud** storage webapp built on ASP.NET Core MVC.
 
-### What Works
-The basics. No access control whatsoever. Just uploads, downloads, folder
-creation, and deletion. I advise against exposing this to the open internet.
+**There is no cloud, only someone else's computer. Or in this case, your own.
 
-### Download
-Get the latest release archive from [here](https://github.com/sildein/Nimbus/releases/latest).
+### Features
+What do you expect? You can upload and download files, make folders, delete
+them, et cetera. There's even a cute little admin panel that lets you configure
+the server. Neat, right?
 
-### Configuration
-See the file `config.ini` in the release archive. You'll notice the following
-options:
-- `Title` - Your server's name. This name is  used in the `<title>` tag, and
-	the menu bar at the top of the page.
-- `Prefix` - Where your files are actually kept. You need to create this folder
-and two subfolders named `Files` and `Temp`. I recommend using forward slashes.
-- `Port` - The port used to access your server. This one shouldn't need to be
-explained. 
+### Using Nimbus
+See [USAGE.md](USING.md).
 
-### Planned for Version 2
-- Multiuser support. This isn't meant to serve a bunch of people, so I'll most
-likely forgo a full-blown database in favor of a plaintext config file
-containing usernames and password hashes.
-- An admin panel that lets you configure user accounts and anonymous access.
+### Changelog
+See [CHANGELOG.md](CHANGELOG.md)
 
 ### License
 ```
@@ -34,11 +23,14 @@ Copyright (c) 2017-present Jesse Jones.
 This license exists because I believe the mainstream free software licenses all
 suck. The GNU GPL is a communist tumor, and the more permissive licenses allow
 developers to get ramrodded.
+-------------------------------------------------------------------------------
+
+Please read this license before running, modifying, or redistributing the
+software. Doing so constitutes agreement to the terms of this license. If you
+do not agree to this license, please remove the software from your machine(s).
 
 You may use this license for your own software, but changing it is disallowed.
 -------------------------------------------------------------------------------
-
-
 
 Usage:
 
@@ -92,9 +84,4 @@ must be moderate changes made to the application logic, or it must be used as
 part of a larger project. If neither of those statements apply, all of the
 statements under "Redistribution" remain in effect.
 -------------------------------------------------------------------------------
-
-Shrink-wrap Clause:
-
-Executing, modifying, or redistributing this software constitutes agreement to
-the terms of this license. If you do not agree, do not use the software.
 ```

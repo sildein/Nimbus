@@ -1,0 +1,34 @@
+<!--
+    ServerSettings.cshtml
+    This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
+-->
+
+@model Nimbus.Models.ServerSettings
+@{
+    Layout = null;
+}
+
+<h2>Server Settings</h2>
+<br/>
+<div class="userbox">
+    <button id="ServerSaveButton" onclick="send_server_settings()">Save Settings</button>
+    <br/><br/>
+</div>
+<div class="userbox">
+    <b>Title:</b><br/><input type="text" id="TitleBox" value="@Model.Title"/><br/>
+    <br/>
+    <b>Prefix:</b><br/><input type="text" id="PrefixBox" value="@Model.Prefix"/><br/>
+    (You will need to move your existing files)<br/>
+    <br/>
+    <b>Port:</b><br/><input type="text" id="PortBox" value="@Model.Port"/><br/>
+    (Will not take effect until the next restart)
+</div>
+<div class="userbox">
+    <b>Admin Password:</b><br/><input type="password" id="AdminPassword" value="_UNCHANGED_"/><br/>
+    <b>Confirm Admin Password:</b><br/><input type="password" id="AdminPasswordConfirm" value="_UNCHANGED_"/><br/>
+    <br/>
+    <b>
+        Please use a strong password containing capital letters, numbers, and punctuation.<br/>
+        Simple passwords can be guessed and/or brute forced.
+    </b>
+</div>

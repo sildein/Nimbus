@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Main.cs
  * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */

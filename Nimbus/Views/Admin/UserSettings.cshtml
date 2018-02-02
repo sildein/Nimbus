@@ -1,0 +1,51 @@
+<!--
+    UserSettings.cshtml
+    This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
+-->
+
+@model Nimbus.Models.UserSettings
+@{
+    Layout = null;
+}
+
+<h2>User Settings</h2>
+<br/>
+
+<div class="userbox">
+    <button id="UserSaveSettings" onclick="send_user_settings()">Save Settings</button>
+    <button id="AddUser" onclick="show_modal()">Add User</button>
+    <br/><br/>
+</div>
+<div id="Users">
+@foreach (string User in Model.Users)
+{
+    <div class="userbox" id="@User">
+        <h3 style="text-decoration:underline">@User</h3>
+        <br/>
+        <b>Password:</b><br/><input type="password" value="_UNCHANGED_"/>
+        <br/><br/>
+        <b>Confirm Password:</b><br/><input type="password" value="_UNCHANGED_"/>
+        <br/><br/>
+        <button onclick="delete_user('@User')">Delete User</button>
+        <br/><br/>
+    </div>
+}
+</div>
+
+<div class="modal-bg" id="NewUserModal">
+    <div class="new-user-box">
+        Username:<br/>
+        <input type="text" id="NewUserName"/><br/>
+        <br/>
+        Password:<br/>
+        <input type="password" id="NewUserPassword"/><br/>
+        <br/>
+        Confirm Password:<br/>
+        <input type="password" id="NewUserPasswordConfirm"/><br/>
+        <br/>
+        <button id="NewUserSubmit" onclick="new_user()">Create</button>
+        <button id="NewUserClose" onclick="close_modal()">Close</button>
+        <br/><br/>
+        <p id="ErrorMessage"></p>
+    </div>
+</div>

@@ -3,8 +3,10 @@
  * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
 
-@import url('https://fonts.googleapis.com/css?family=Ubuntu');
-@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
+/*@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');*/
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Mono');
 
 * {
     font-family: Ubuntu;
@@ -111,7 +113,7 @@ body {
     top: 45px;
     right: 0px;
     width: 360px;
-    height: 100px;
+    height: 100%;
     overflow: auto;
     overflow-wrap: break-word;
     background-color: #8795ad;

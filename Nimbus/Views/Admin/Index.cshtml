@@ -1,0 +1,39 @@
+<!--
+    Index.cshtml
+    This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
+-->
+
+@{
+    Layout = null;
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@Nimbus.Shared.Title - Admin Panel</title>
+</head>
+<body>
+    <div class="titlebar">
+        <div class="title">
+            @Nimbus.Shared.Title - Admin Panel
+        </div>
+        <div class="item" onclick="load_server_settings()">
+            Server
+        </div>
+        <div class="item" onclick="load_user_settings()">
+            Users
+        </div>
+    </div>
+    <div class="content" id="SettingsView"></div>
+</body>
+
+<footer>
+    <link rel="stylesheet" href="~/css/admin.css" />
+
+    <script src="~/js/admin.js"></script>
+</footer>
+</html>

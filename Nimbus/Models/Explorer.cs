@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Explorer.cs
  * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
@@ -17,19 +17,25 @@ namespace Nimbus.Models
         public List<string> Folders;
         public string CurrentDirectory;
 
-        public Explorer(string Folder)
+        public Explorer(string Username, string Folder)
         {
             this.Files = new List<string>();
             this.Folders = new List<string>();
 
             this.CurrentDirectory = Folder;
 
-            string[] Files = Directory.GetFiles(Shared.Prefix + "/Files" + Folder);
-            foreach (string file in Files) this.Files.Add(file.Split('/', '\\').Last());
+            string FinalDirectory = Path.Combine(Shared.Prefix,
+                                                 "Files",
+                                                 Username,
+                                                 Folder.Substring(1));
 
-            string[] Folders = Directory.GetDirectories(Shared.Prefix + "/Files" + Folder);
-            foreach (string folder in Folders) this.Folders.Add(folder.Split('/', '\\').Last());
-            Directory.GetCurrentDirectory();
+            //string[] Files = Directory.GetFiles(FinalDirectory);
+            foreach (string file in Directory.GetFiles(FinalDirectory))
+                this.Files.Add(file.Split('/', '\\').Last());
+
+            //string[] Folders = Directory.GetDirectories(FinalDirectory);
+            foreach (string folder in Directory.GetDirectories(FinalDirectory))
+                this.Folders.Add(folder.Split('/', '\\').Last());
         }
     }
 }

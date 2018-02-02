@@ -1,0 +1,40 @@
+<!--
+    Index.cshtml
+    This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
+-->
+
+@{
+    Layout = null;
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body>
+    <div class="titlebar">
+        <div class="title">@Nimbus.Shared.Title - User Login</div>
+    </div>
+    <div class="login-box">
+        Username:<br/>
+        <input type="text" id="Username" /><br/>
+        <br/>
+        Password:<br/>
+        <input type="password" id="Password" /><br/>
+        <button id="LoginButton">Login</button><br/>
+        <br/><br/>
+        <p id="ErrorMessage"></p>
+    </div>
+</body>
+
+<footer>
+    <link rel="stylesheet" href="~/css/login.css" />
+
+    <script src="~/js/auth.js"></script>
+</footer>
+</html>

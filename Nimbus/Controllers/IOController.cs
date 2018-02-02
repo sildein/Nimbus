@@ -1,7 +1,11 @@
-﻿using System;
+/*
+ * IOController.cs
+ * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
+ */
+
+using System;
 using System.IO;
 using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,68 +16,138 @@ namespace Nimbus.Controllers
     public class IOController : Controller
     {
         [HttpGet]
-        public async Task<FileResult> Download(string file)
+        public IActionResult Download(string file)
         {
-            string FilePath = Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + '/' + file;
-            FileStream FStream = new FileStream(Shared.Prefix + "/Files" + FilePath, FileMode.Open);
-            return File(FStream, Shared.GetContentType(FilePath), Path.GetFileName(FilePath));
+            // Check the user's auth cookie (if any)
+            string Username =
+                Shared.Users.ValidateCookie(Request.Cookies["Auth"]);
+            if (Username == null) return Forbid();
+
+            // Self-explanatory
+            FileStream FStream = new FileStream(Path.Combine(new string[] {
+                Shared.Prefix,
+                "Files",
+                Username,
+                HttpContext.Session.GetString("pwd").Substring(1),
+                file
+            }), FileMode.Open);
+            return File(FStream, Shared.GetContentType(file),
+                        Path.GetFileName(file));
         }
         
         [HttpPost]
         public async Task Upload()
         {
-            IFormFile IncomingFile = Request.Form.Files[0];
-            string FilePath = Shared.Prefix + "/Files" + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd"));
-            string TempFilePath = Shared.Prefix + "/Temp";
-            string PartialFileName = IncomingFile.FileName.Trim('"');
-            int ThisChunk = Int32.Parse(PartialFileName.Split('_').Last().Split('.').First());
-            int TotalChunks = Int32.Parse(PartialFileName.Split('_').Last().Split('.').Last());
+            // Check the user's auth cookie (if any)
+            string Username =
+                Shared.Users.ValidateCookie(Request.Cookies["Auth"]);
+            if (Username == null) return;
 
-            string FileName = PartialFileName.Substring(0, PartialFileName.LastIndexOf('_'));
+            // This is our file object and the name of this file chunk
+            IFormFile IncomingFile = Request.Form.Files[0];
+            string PartialFileName = IncomingFile.FileName.Trim('"');
+
+            // Which chunk is this?
+            int ThisChunk = Int32.Parse(
+                PartialFileName.Split('_').Last().Split('.').First());
+            int TotalChunks = Int32.Parse(
+                PartialFileName.Split('_').Last().Split('.').Last());
+
+            // Get the name of the whole file
+            string FileName = PartialFileName.Substring(
+                0, PartialFileName.LastIndexOf('_'));
             FileName = FileName.Substring(0, FileName.LastIndexOf('.'));
 
-            using (FileStream FStream = new FileStream(TempFilePath + '/' + PartialFileName, FileMode.Create))
-            {
-                await IncomingFile.CopyToAsync(FStream);
-                FStream.Close();
-            }
+            // Write the chunk to disk
+            FileStream FStream = new FileStream(Path.Combine(new string[] {
+                Shared.Prefix,
+                "Temp",
+                PartialFileName
+            }), FileMode.Create);
+            await IncomingFile.CopyToAsync(FStream);
+            FStream.Close();
 
+            // If we have all of the chunks, rejoin them
             if (ThisChunk == TotalChunks)
             {
-                FileStream FStream = new FileStream(FilePath + '/' + FileName, FileMode.Create);
+                string EndFilePath = Path.Combine(new string[] {
+                    Shared.Prefix,
+                    "Files",
+                    Username,
+                    HttpContext.Session.GetString("pwd").Substring(1),
+                    FileName
+                });
+                FileStream EndFileStream = new FileStream(EndFilePath,
+                                                    FileMode.Create);
                 for (int i = 1; i <= TotalChunks; i++)
                 {
-                    string FullFilePath = TempFilePath + '/' + FileName + String.Format(".part_{0}.{1}",
-                        i, TotalChunks);
-                    FileStream PartialFileStream = new FileStream(FullFilePath, FileMode.Open);
-                    await PartialFileStream.CopyToAsync(FStream);
+                    string ChunkPath = Path.Combine(new string[] {
+                        Shared.Prefix,
+                        "Temp",
+                        String.Format("{0}.part_{1}.{2}", new string[] {
+                            FileName,
+                            i.ToString(),
+                            TotalChunks.ToString()
+                        })
+                    });
+                    FileStream PartialFileStream =
+                        new FileStream(ChunkPath, FileMode.Open);
+                    await PartialFileStream.CopyToAsync(EndFileStream);
                     PartialFileStream.Close();
-                    System.IO.File.Delete(FullFilePath);
+                    System.IO.File.Delete(ChunkPath);
                 }
-                FStream.Close();
+                EndFileStream.Close();
             }
         }
         
         [HttpPost]
-        public async Task<IActionResult> NewFolder(string name)
+        public IActionResult NewFolder()
         {
-            string Folder = Shared.Prefix + "/Files" + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + name;
+            string Username =
+                Shared.Users.ValidateCookie(Request.Cookies["Auth"]);
+            if (Username == null) return Forbid();
+
+            string FolderName = Request.Form["FolderName"];
+            
+            string Folder = Path.Combine(new string[] {
+                Shared.Prefix,
+                "Files",
+                Username,
+                HttpContext.Session.GetString("pwd").Substring(1),
+                FolderName
+            });
             Directory.CreateDirectory(Folder);
             return Ok();
         }
         
         [HttpPost]
-        public async Task<IActionResult> Delete(string thing_to_delete)
+        public IActionResult Delete()
         {
-            if (thing_to_delete.StartsWith("folder_"))
+            string Username =
+                Shared.Users.ValidateCookie(Request.Cookies["Auth"]);
+            if (Username == null) return Forbid();
+
+            string DeletThis = Request.Form["DeletThis"];
+
+            if (DeletThis.StartsWith("folder_"))
             {
-                Directory.Delete(Shared.Prefix + "/Files" + Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) +
-                    thing_to_delete.Substring(7), true);
-            } else if (thing_to_delete.StartsWith("file_"))
+                Directory.Delete(Path.Combine(new string[] {
+                    Shared.Prefix,
+                    "Files",
+                    Username,
+                    HttpContext.Session.GetString("pwd").Substring(1),
+                    DeletThis.Substring(7)
+                }), true);
+            }
+            else if (DeletThis.StartsWith("file_"))
             {
-                string DeletThis = Shared.Prefix + "/Files" +
-                    Encoding.ASCII.GetString(HttpContext.Session.Get("pwd")) + '/' + thing_to_delete.Substring(5);
-                System.IO.File.Delete(DeletThis);
+                System.IO.File.Delete(Path.Combine(new string[] {
+                    Shared.Prefix,
+                    "Files",
+                    Username,
+                    HttpContext.Session.GetString("pwd").Substring(1),
+                    DeletThis.Substring(5)
+                }));
             }
 
             return Ok();

@@ -1,15 +1,18 @@
-﻿####################### Sildein's Free Software License #######################
+####################### Sildein's Free Software License #######################
 
 Copyright (c) 2017-present Jesse Jones.
 
 This license exists because I believe the mainstream free software licenses all
 suck. The GNU GPL is a communist tumor, and the more permissive licenses allow
 developers to get ramrodded.
+-------------------------------------------------------------------------------
+
+Please read this license before running, modifying, or redistributing the
+software. Doing so constitutes agreement to the terms of this license. If you
+do not agree to this license, please remove the software from your machine(s).
 
 You may use this license for your own software, but changing it is disallowed.
 -------------------------------------------------------------------------------
-
-
 
 Usage:
 
@@ -63,8 +66,3 @@ must be moderate changes made to the application logic, or it must be used as
 part of a larger project. If neither of those statements apply, all of the
 statements under "Redistribution" remain in effect.
 -------------------------------------------------------------------------------
-
-Shrink-wrap Clause:
-
-Executing, modifying, or redistributing this software constitutes agreement to
-the terms of this license. If you do not agree, do not use the software.

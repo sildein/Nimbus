@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Program.cs
  * This file is a part of Nimbus. Copyright (c) 2017-present Jesse Jones.
  */
@@ -40,6 +40,9 @@ namespace Nimbus
                         break;
                 }
             }
+
+            Shared.Users = new UserDatabase();
+            Shared.Admin = new AdminSettings();
 
             BuildWebHost(args).Run();
         }
